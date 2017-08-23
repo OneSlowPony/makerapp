@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang = en>
+<head>
+	<meta charset = "utf-8">
+	<meta http-equiv = "X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title> UploadCSV </title>
+	<!-- Bootstrap Style Sheet (CDN) -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<!-- LOCAL FALLBACK: <link href = "static/css/bootstrap.min.css" rel="stylesheet"> -->
+
+	<style type="text/css">
+
+		body{
+			padding-top: 70px;
+		}
+
+		.container {
+			font-family: "Trebuchet MS", Helvetica, sans-serif;
+		}
+
+		.jumbotron {
+			font-family: Verdana, Geneva, sans-serif; 
+			text-align: center;
+			color: white;
+			border-style: solid;
+			border-color: #0B6764;
+			background-color: #0B6764;
+			height: 100px;
+			width: 940px;
+			padding-top: 10px;
+		}
+
+		.metadata {
+			height: 250px;
+			width: 300px;
+			border-style: solid;
+			border-radius: 15px;
+			border-color: #4FB5B1;
+			padding-left: 10px;
+			padding-top: 10px;
+			font-size: 14px;
+			line-height: 30px;
+			text-align: justify;
+		}
+
+		.upload {
+			height: 250px;
+			width: 300px;
+			border-style: solid;
+			border-color: #4FB5B1;
+			border-radius: 15px;
+			background-color: #4FB5B1;	
+			padding-left: 10px;
+			padding-top: 10px;
+			font-size: 14px;
+			text-align: center;
+			padding-right: 10px;
+		}
+
+		.submitdata {
+			height: 250px;
+			width: 300px;
+			border-style: solid;
+			border-radius: 15px;
+			border-color: #4FB5B1;
+			padding-left: 10px;
+			padding-top: 50px;
+			font-size: 14px;
+			text-align: center;
+		}
+
+	</style>
+
+</head>
+
+
+<body>
+	
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<!-- button type here -->
+				<a class="navbar-brand" href="http://consiliencelearning.org/">Linchpin Analytics</a>
+			</div>
+		</div>
+	</nav>
+
+
+	<div class="container">
+		<div class="jumbotron">
+			<h2> Upload Data Here :  </h2>
+		</div>
+
+	<!-- we are sending the data to a different URL on the SAME server by giving a relative action location 
+	In a post method, the data is appended to the http body of the request. -->	
+	
+		<div class="row">
+			<div class="col-md-4">
+
+				<form action = "{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+				<div class = "metadata">
+					<h4> Session Details: </h4>
+					<select name="session_num" id="session_num">
+					<option value=1>  1: Electronics (1/2)</option>
+					<option value=2>  2: Electronics (2/2)</option>
+					<option value=3>  3: Programming (1/3)</option>
+					<option value=4>  4: Programming (2/3)</option>
+					<option value=5>  5: Programming (3/3)</option>
+					<option value=6>  6: Assessment (1/3) </option>
+					<option value=7>  7: Robotics (1/2)</option>
+					<option value=8>  8: Robotics (2/2)</option>
+					<option value=9>  9: Embedded Systems (1/3)</option>
+					<option value=10> 10: Embedded Systems (2/3)</option>
+					<option value=11> 11: Embedded Systems (3/3)</option>
+					<option value=12> 12: Robotics (1/6)</option>
+					<option value=13> 13: Robotics (2/6)</option>
+					<option value=14> 14: Robotics (3/6)</option>
+					<option value=15> 15: Robotics (4/6)</option>
+					<option value=16> 16: Robotics (5/6)</option>
+					<option value=17> 17: Robotics (6/6)</option>
+					<option value=18> 18: Assessment (2/3)</option>
+					<option value=19> 19: Assessment (3/3)</option>
+					<option value=20> 20: Buffer Day</option>
+					</select> <br>
+					
+					Date: <input type = "date" name="session_date" id="session_date">
+					<br>
+					Length: 
+					<select name="session_length" id="session_length">
+						<option value=105>2:15pm - 4:00pm</option>
+						<option value=330>9:30am - 4:00pm</option>
+					</select>
+					<br>
+					Assessment Day?
+					<select name="assessment" id="assessment">
+						<option value=False>No</option>
+						<option value=True>Yes</option>
+					</select>
+					<br>
+					Maker Look Fors?  
+					<select name="makerlookfor" id="makerlookfor">
+						<option value=False>No</option>
+						<option value=True>Yes</option>
+					</select>
+				
+				</div>
+			</div>
+
+			<div class="col-md-4">
+	
+				<div class = "upload">
+					<h4> Select Files (.csv only) </h4>
+					<input type = "file" class= "filestyle" data-buttonText = "Search" data-placeholder = "No Files Selected" name="file[]" id="file" multiple onchange="javascript:updateList()">	
+					<div id="fileList"></div>
+				</div>
+			</div>
+
+			<div class="col-md-4">
+				<div class = "submitdata">
+				<!--- POSTS the data to the (web) server for our flask request object to access-->
+					<input type="submit" class="btn btn-default" value="Upload">
+				</div>
+			</div>
+				
+				</form>
+		</div>
+	</div>
+	
+	<!-- JQuery & Boostrap files (CDN)-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- local fallback JQuery -->
+    <script>window.jQuery || document.write('<script src="static/js/jquery.min.js"><\/script>')</script>
+	<script type="text/javascript" src="static/js/bootstrap-filestyle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script>if(typeof($.fn.modal) === 'undefined') {document.write('<script src="static/js/bootstrap.min.js"><\/script>')}</script>
+	
+	 <!-- Bootstrap CSS local fallback -->
+  	<div id="bootstrapCssTest" class="hidden"></div>
+  	<script>
+    	$(function() {
+      	if ($('#bootstrapCssTest').is(':visible')) {
+        	$("head").prepend('<link rel="stylesheet" href="static/css/bootstrap.min.css">');
+      	}
+    	});
+  	</script>
+
+  	<script>
+  		updateList = function() {
+  		var input = document.getElementById('file');
+  		var output = document.getElementById('fileList');
+
+  		output.innerHTML = '<ul>';
+  		for (var i = 0; i < input.files.length; ++i) {
+    		output.innerHTML += '<li>' + input.files.item(i).name + '</li>';
+  		}
+  		output.innerHTML += '</ul>';
+		}
+  	</script>
+
+
+</body>
+</html>
